@@ -284,6 +284,10 @@
 	#playGameBtn:hover {
 	    color: #0056b3;
 	}
+	iframe {
+		height: auto;
+		width: auto;
+	}
     </style>
     <!-- Einbindung von Chart.js über CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -810,7 +814,7 @@
         updateCoinDisplay();
 
         // iFrame anzeigen
-        iframeModal.style.display = 'circle';
+        iframeModal.style.display = 'block';
         gameIframe.src = 'https://snake-game.io/'; // Ersetzen Sie diese URL durch die gewünschte Spiele-Website
 
         // Timer starten
