@@ -576,7 +576,7 @@
     
     let iframeTimeout;
 
-        // Funktion zur Anzeige der Vokabellisten
+       // Funktion zur Anzeige der Vokabellisten
         function renderLists() {
             listsElement.innerHTML = '';
             lists.forEach((list, index) => {
@@ -592,6 +592,16 @@
                     deleteList(index);
                 };
                 li.appendChild(deleteButton);
+
+                // Download-Button für jede Liste
+                const downloadButton = document.createElement('button');
+                downloadButton.innerHTML = '<i class="fas fa-download"></i>'; // Icon für den Download-Button
+                downloadButton.classList.add('icon');
+                downloadButton.onclick = (e) => {
+                    e.stopPropagation(); // Verhindert das Öffnen der Liste
+                    downloadSingleList(index);
+                };
+                li.appendChild(downloadButton);
 
                 li.addEventListener('click', () => {
                     currentListIndex = index;
@@ -610,23 +620,19 @@
             }
         }
 
-        // Funktion zum Herunterladen der Vokabellisten als JSON-Datei
-        function downloadVocabulary() {
-            try {
-                const dataStr = JSON.stringify(lists, null, 2); // Konvertiere `lists` in JSON-String
-                const blob = new Blob([dataStr], { type: "application/json" }); // Blob erstellen
-                const url = URL.createObjectURL(blob); // URL für den Download erstellen
-                const a = document.createElement("a"); // Unsichtbaren Link erstellen
-                a.href = url;
-                a.download = "vokabelliste.json"; // Download-Name festlegen
-                document.body.appendChild(a); // Link zum DOM hinzufügen
-                a.click(); // Klick auf den Link auslösen
-                document.body.removeChild(a); // Link wieder aus dem DOM entfernen
-                URL.revokeObjectURL(url); // URL freigeben
-            } catch (error) {
-                console.error("Fehler beim Herunterladen der Datei:", error);
-                alert("Fehler beim Herunterladen der Datei.");
-            }
+        // Funktion zum Herunterladen einer einzelnen Vokabelliste
+        function downloadSingleList(index) {
+            const list = lists[index]; // Spezifische Vokabelliste auswählen
+            const dataStr = JSON.stringify(list, null, 2); // JSON-Daten der Liste
+            const blob = new Blob([dataStr], { type: "application/json" }); // Blob erstellen
+            const url = URL.createObjectURL(blob); // URL für den Download erstellen
+            const a = document.createElement("a"); // Unsichtbaren Link erstellen
+            a.href = url;
+            a.download = `${list.name}.json`; // Download-Name basierend auf dem Listennamen
+            document.body.appendChild(a); // Link zum DOM hinzufügen
+            a.click(); // Klick auf den Link auslösen
+            document.body.removeChild(a); // Link wieder aus dem DOM entfernen
+            URL.revokeObjectURL(url); // URL freigeben
         }
 
         // Funktion zum Hochladen einer Vokabelliste aus einer JSON-Datei
