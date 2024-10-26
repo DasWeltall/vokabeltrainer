@@ -288,6 +288,39 @@
 		height: 600px;
 		width: 600px;
 	}
+	/* Popup-Styles */
+        #popup {
+            display: none; /* Standardmäßig versteckt */
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 2px solid #4CAF50;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            z-index: 1000;
+            width: 300px;
+            text-align: center;
+        }
+        #overlay {
+            display: none; /* Standardmäßig versteckt */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .close-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
     </style>
     <!-- Einbindung von Chart.js über CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -445,7 +478,17 @@
         </div>
     </div>
 </div>
-
+<div id="overlay"></div>
+<div id="popup">
+    <h2>🎉 Neues Update: Verbesserte Funktionen! 🎉</h2>
+    <p>Entdecke die neuesten Verbesserungen auf unserer Website!</p>
+    <ul>
+        <li>🚀 Schnellere Ladezeiten</li>
+        <li>🖥️ Benutzerfreundliches Design</li>
+        <li>🌟 Neue Funktionen für ein besseres Erlebnis</li>
+    </ul>
+    <button class="close-btn" onclick="closePopup()">Schließen</button>
+</div>
 <script>
     // Variablen
     let lists = JSON.parse(localStorage.getItem('vocabLists')) || [];
@@ -1006,6 +1049,24 @@
                 updateStreakDisplay();
             }
         }
+    };
+
+
+    // Funktion zum Öffnen des Popups
+    function openPopup() {
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('popup').style.display = 'block';
+    }
+
+    // Funktion zum Schließen des Popups
+    function closePopup() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('popup').style.display = 'none';
+    }
+
+    // Popup beim Laden der Seite öffnen
+    window.onload = function() {
+        openPopup();
     };
 </script>
 
