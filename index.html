@@ -322,6 +322,30 @@
             cursor: pointer;
             margin-top: 10px;
         }
+	/* Popup-Styles */
+        #cookie-popup {
+            display: none; /* Standardmäßig versteckt */
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+            border: 2px solid #007bff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            z-index: 1000;
+            width: 300px;
+            text-align: center;
+            border-radius: 10px; /* Ecken abrunden */
+        }
+        .accept-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
     </style>
     <!-- Einbindung von Chart.js über CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -489,6 +513,11 @@
         <li>🔗 Teile deinen Fortschritt!</li>
     </ul>
     <button class="close-btn" onclick="closePopup()">Schließen</button>
+</div>
+<div id="cookie-popup">
+    <h2>🍪 Cookie-Zustimmung</h2>
+    <p>Wir verwenden Cookies, um Ihnen das beste Erlebnis auf unserer Website zu bieten. Durch die Nutzung unserer Website stimmen Sie der Verwendung von Cookies zu.</p>
+    <button class="accept-btn" onclick="acceptCookies()">Zustimmen</button>
 </div>
 <script>
     // Variablen
@@ -1087,6 +1116,32 @@ function getCookie(name) {
 	    }
 	};
 
+	    // Funktion zum Setzen eines Cookies
+    function setCookie(name, value, days) {
+        const expires = new Date(Date.now() + days * 864e5).toUTCString();
+        document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
+    }
+
+    // Funktion zum Abrufen eines Cookies
+    function getCookie(name) {
+        return document.cookie.split('; ').reduce((r, v) => {
+            const parts = v.split('=');
+            return parts[0] === name ? decodeURIComponent(parts[1]) : r;
+        }, '');
+    }
+
+    // Funktion zum Akzeptieren von Cookies
+    function acceptCookies() {
+        setCookie('cookiesAccepted', 'true', 30); // Setze ein Cookie für 30 Tage
+        document.getElementById('cookie-popup').style.display = 'none'; // Popup schließen
+    }
+
+    // Überprüfen, ob der Benutzer bereits zugestimmt hat
+    window.onload = function() {
+        if (!getCookie('cookiesAccepted')) {
+            document.getElementById('cookie-popup').style.display = 'block'; // Popup anzeigen
+        }
+    };
 </script>
 
 </body>
