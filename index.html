@@ -322,6 +322,34 @@
             cursor: pointer;
             margin-top: 10px;
         }
+	    /* Stil für den Download-Button */
+    .download-button {
+        background-color: #4CAF50; /* Farbe für den Download-Button */
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s;
+    }
+    .download-button:hover {
+        background-color: #45a049;
+    }
+
+    /* Stil für den Lösch-Button ohne Hintergrund */
+    .delete-button {
+        background-color: transparent; /* Hintergrund entfernen */
+        border: none; /* Rahmen entfernen */
+        color: #dc3545; /* Farbe des Icons */
+        cursor: pointer;
+        font-size: 18px;
+        padding: 5px;
+        transition: color 0.3s;
+    }
+    .delete-button:hover {
+        color: #c82333; /* Hover-Farbe für das Lösch-Icon */
+    }
     </style>
     <!-- Einbindung von Chart.js über CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -576,40 +604,40 @@
     
     let iframeTimeout;
 
-       // Funktion zur Anzeige der Vokabellisten
-        function renderLists() {
-            listsElement.innerHTML = '';
-            lists.forEach((list, index) => {
-                const li = document.createElement('li');
-                li.textContent = list.name;
+       function renderLists() {
+    listsElement.innerHTML = '';
+    lists.forEach((list, index) => {
+        const li = document.createElement('li');
+        li.textContent = list.name;
 
-                // Lösch-Button für jede Liste
-                const deleteButton = document.createElement('button');
-                deleteButton.innerHTML = '<i class="fas fa-trash"></i>'; // Icon für den Löschen-Button
-                deleteButton.classList.add('icon');
-                deleteButton.onclick = (e) => {
-                    e.stopPropagation(); // Verhindert das Öffnen der Liste
-                    deleteList(index);
-                };
-                li.appendChild(deleteButton);
+        // Lösch-Button für jede Liste
+        const deleteButton = document.createElement('button');
+        deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+        deleteButton.classList.add('delete-button'); // Hier die neue CSS-Klasse anwenden
+        deleteButton.onclick = (e) => {
+            e.stopPropagation();
+            deleteList(index);
+        };
+        li.appendChild(deleteButton);
 
-                // Download-Button für jede Liste
-                const downloadButton = document.createElement('button');
-                downloadButton.innerHTML = '<i class="fas fa-download"></i>'; // Icon für den Download-Button
-                downloadButton.classList.add('icon');
-                downloadButton.onclick = (e) => {
-                    e.stopPropagation(); // Verhindert das Öffnen der Liste
-                    downloadSingleList(index);
-                };
-                li.appendChild(downloadButton);
+        // Download-Button für jede Liste
+        const downloadButton = document.createElement('button');
+        downloadButton.innerHTML = '<i class="fas fa-download"></i>';
+        downloadButton.classList.add('download-button');
+        downloadButton.onclick = (e) => {
+            e.stopPropagation();
+            downloadSingleList(index);
+        };
+        li.appendChild(downloadButton);
 
-                li.addEventListener('click', () => {
-                    currentListIndex = index;
-                    openList();
-                });
-                listsElement.appendChild(li);
-            });
-        }
+        li.addEventListener('click', () => {
+            currentListIndex = index;
+            openList();
+        });
+        listsElement.appendChild(li);
+    });
+}
+
 
         // Funktion zum Löschen einer einzelnen Vokabelliste
         function deleteList(index) {
@@ -636,28 +664,33 @@
         }
 
         // Funktion zum Hochladen einer Vokabelliste aus einer JSON-Datei
-        function uploadVocabulary(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+	function uploadVocabulary(event) {
+    const file = event.target.files[0];
+    if (!file) return;
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const importedData = JSON.parse(e.target.result);
-                    if (Array.isArray(importedData)) {
-                        lists = importedData;
-                        saveLists();
-                        renderLists();
-                        alert("Vokabelliste erfolgreich importiert.");
-                    } else {
-                        alert("Ungültiges Dateiformat.");
-                    }
-                } catch (error) {
-                    alert("Fehler beim Importieren der Datei.");
-                }
-            };
-            reader.readAsText(file);
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const importedData = JSON.parse(e.target.result);
+            
+            // Prüfen, ob die Datenstruktur den Erwartungen entspricht
+            if (Array.isArray(importedData) && importedData.every(list =>
+                list.name && Array.isArray(list.vocabularies) &&
+                list.vocabularies.every(vocab => vocab.word && vocab.translation)
+            )) {
+                lists = importedData;
+                saveLists();
+                renderLists();
+                alert("Vokabelliste erfolgreich importiert.");
+            } else {
+                alert("Ungültiges Dateiformat. Die Datei muss ein Array von Listen mit den Eigenschaften 'name' und 'vocabularies' sein.");
+            }
+        } catch (error) {
+            alert("Fehler beim Importieren der Datei: Ungültiges JSON-Format.");
         }
+    };
+    reader.readAsText(file);
+}
 
         // Funktion zum Speichern der Listen im LocalStorage
         function saveLists() {
