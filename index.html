@@ -576,12 +576,6 @@
     
     let iframeTimeout;
 
-
-    let lists = JSON.parse(localStorage.getItem('vocabLists')) || [];
-        let currentListIndex = null;
-
-        const listsElement = document.getElementById('lists');
-
         // Funktion zur Anzeige der Vokabellisten
         function renderLists() {
             listsElement.innerHTML = '';
