@@ -374,6 +374,9 @@
     <div class="list-header">
         <h2>Vokabellisten</h2>
         <button id="addListBtn">+ Neue Liste</button>
+        <button onclick="downloadVocabulary()">Vokabelliste herunterladen</button>
+        <input type="file" id="fileInput" onchange="uploadVocabulary(event)" style="display: none;">
+        <button onclick="document.getElementById('fileInput').click()">Vokabelliste hochladen</button>
     </div>
 
     <ul id="lists">
@@ -596,18 +599,41 @@
 
     // Funktionen
     function renderLists() {
-        listsElement.innerHTML = '';
-        lists.forEach((list, index) => {
-            const li = document.createElement('li');
-            li.textContent = list.name;
-            li.addEventListener('click', () => {
-                currentListIndex = index;
-                openList();
-            });
-            listsElement.appendChild(li);
-        });
-    }
+    listsElement.innerHTML = '';
+    lists.forEach((list, index) => {
+        const li = document.createElement('li');
+        li.textContent = list.name;
 
+        // Lösch-Button für jede Liste
+        const deleteButton = document.createElement('button');
+        deleteButton.innerHTML = '<i class="fas fa-trash"></i>'; // Icon für den Löschen-Button
+        deleteButton.classList.add('icon');
+        deleteButton.onclick = (e) => {
+            e.stopPropagation(); // Verhindert das Öffnen der Liste
+            deleteList(index);
+        };
+        li.appendChild(deleteButton);
+
+        li.addEventListener('click', () => {
+            currentListIndex = index;
+            openList();
+        });
+        listsElement.appendChild(li);
+    });
+   }
+
+// Funktion zum Löschen einer einzelnen Vokabelliste
+function deleteList(index) {
+    if (confirm("Möchtest du diese Vokabelliste wirklich löschen?")) {
+        lists.splice(index, 1); // Liste aus dem Array entfernen
+        saveLists();           // Aktualisierte Listen speichern
+        renderLists();         // Listen neu anzeigen
+    }
+}
+
+	window.onload = function() {
+    		renderLists();
+	};
     function updateCoinDisplay() {
         coinCountElement.textContent = coins;
     }
