@@ -1053,22 +1053,26 @@
     };
 
 
-    // Funktion zum Öffnen des Popups
-    function openPopup() {
-        document.getElementById('overlay').style.display = 'block';
-        document.getElementById('popup').style.display = 'block';
-    }
+        // Funktion zum Öffnen des Popups
+	function openPopup() {
+	    document.getElementById('overlay').style.display = 'block';
+	    document.getElementById('popup').style.display = 'block';
+	}
+	
+	// Funktion zum Schließen des Popups
+	function closePopup() {
+	    document.getElementById('overlay').style.display = 'none';
+	    document.getElementById('popup').style.display = 'none';
+	    localStorage.setItem('popupDisplayed', 'true'); // Setze den Wert im localStorage
+	}
+	
+	// Überprüfen, ob das Popup bereits angezeigt wurde
+	window.onload = function() {
+	    if (!localStorage.getItem('popupDisplayed')) {
+	        openPopup(); // Popup nur öffnen, wenn es noch nicht angezeigt wurde
+	    }
+	};
 
-    // Funktion zum Schließen des Popups
-    function closePopup() {
-        document.getElementById('overlay').style.display = 'none';
-        document.getElementById('popup').style.display = 'none';
-    }
-
-    // Popup beim Laden der Seite öffnen
-    window.onload = function() {
-        openPopup();
-    };
 </script>
 
 </body>
