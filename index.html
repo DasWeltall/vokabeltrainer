@@ -1053,7 +1053,21 @@
     };
 
 
-        // Funktion zum Öffnen des Popups
+// Funktion zum Setzen eines Cookies
+function setCookie(name, value, days) {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
+}
+
+// Funktion zum Abrufen eines Cookies
+function getCookie(name) {
+    return document.cookie.split('; ').reduce((r, v) => {
+        const parts = v.split('=');
+        return parts[0] === name ? decodeURIComponent(parts[1]) : r;
+    }, '');
+}
+
+	// Funktion zum Öffnen des Popups
 	function openPopup() {
 	    document.getElementById('overlay').style.display = 'block';
 	    document.getElementById('popup').style.display = 'block';
@@ -1063,12 +1077,12 @@
 	function closePopup() {
 	    document.getElementById('overlay').style.display = 'none';
 	    document.getElementById('popup').style.display = 'none';
-	    localStorage.setItem('popupDisplayed', 'true'); // Setze den Wert im localStorage
+	    setCookie('popupDisplayed', 'true', 30); // Setze ein Cookie für 30 Tage
 	}
 	
 	// Überprüfen, ob das Popup bereits angezeigt wurde
 	window.onload = function() {
-	    if (!localStorage.getItem('popupDisplayed')) {
+	    if (!getCookie('popupDisplayed')) {
 	        openPopup(); // Popup nur öffnen, wenn es noch nicht angezeigt wurde
 	    }
 	};
