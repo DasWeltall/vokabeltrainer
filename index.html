@@ -597,6 +597,10 @@
     
     let iframeTimeout;
 
+
+    let lists = JSON.parse(localStorage.getItem('vocabLists')) || [];
+    let currentListIndex = null;
+    const listsElement = document.getElementById('lists');
     // Funktionen
     function renderLists() {
     listsElement.innerHTML = '';
