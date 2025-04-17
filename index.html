@@ -1171,37 +1171,7 @@
         }, '');
     }
 
-    // Funktion zum Öffnen des Update-Popups
-    function openUpdatePopup() {
-        document.getElementById('overlay').style.display = 'block';
-        document.getElementById('update-popup').style.display = 'block';
-    }
 
-    // Funktion zum Schließen des Update-Popups
-    function closeUpdatePopup() {
-        document.getElementById('overlay').style.display = 'none';
-        document.getElementById('update-popup').style.display = 'none';
-        localStorage.setItem('updatePopupDisplayed', 'true'); // Setze den Wert im localStorage
-    }
-
-    // Funktion zum Akzeptieren von Cookies
-    function acceptCookies() {
-        setCookie('cookiesAccepted', 'true', 30); // Setze ein Cookie für 30 Tage
-        document.getElementById('overlay').style.display = 'none';
-        document.getElementById('cookie-popup').style.display = 'none'; // Popup schließen
-    }
-
-    // Überprüfen, ob das Update-Popup bereits angezeigt wurde
-    window.onload = function() {
-        if (!localStorage.getItem('updatePopupDisplayed')) {
-            openUpdatePopup(); // Popup nur öffnen, wenn es noch nicht angezeigt wurde
-        }
-	// Überprüfen, ob der Benutzer bereits zugestimmt hat
-        if (!getCookie('cookiesAccepted')) {
-            document.getElementById('overlay').style.display = 'block';
-            document.getElementById('cookie-popup').style.display = 'block'; // Cookie-Popup anzeigen
-        }
-    };
 </script>
 
 </body>
